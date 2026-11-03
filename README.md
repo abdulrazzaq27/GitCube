@@ -124,15 +124,16 @@ controls the six stages; `COMPLEXITY_THRESHOLDS` controls recent complexity.
 
 | Tier | 2×2 | Moves | 3×3 | Moves |
 | --- | --- | ---: | --- | ---: |
-| Short | Ortega PBL, diagonal / diagonal | 3 | Checkerboard | 6 |
-| Intermediate | Ortega PBL, adjacent / adjacent | 7 | T-perm | 14 |
-| Advanced | T-perm, adjacent corners | 14 | Y-perm | 17 |
+| Short (fewer than 30) | Ortega PBL, diagonal / diagonal | 3 | Checkerboard | 6 |
+| Intermediate (30–99) | Ortega PBL, adjacent / adjacent | 7 | T-perm | 14 |
+| Advanced (100–149) | T-perm, adjacent corners | 14 | Na-perm | 21 |
+| Advanced (150 and up) | T-perm, adjacent corners | 14 | Y-perm | 17 |
 
-A fourth 3×3 case, `Na-perm` (21 moves), is registered at the Advanced tier and
-is verified like every other entry. Registration order is the selection order,
-so `Y-perm` remains the case that animates an Advanced 3×3 cube; see
-[the algorithm catalog](docs/architecture.md#algorithm-catalog) for the exact
-rule and how to promote `Na-perm`.
+The 3×3 Advanced tier is split so that both advanced cases are used: Na-perm
+animates 100–149 recent commits, and Y-perm takes over at 150. The 2×2 keeps one
+case per tier, so `T-perm, adjacent corners` covers both Advanced rows. Each
+entry may declare its own exclusive commit ceiling; see
+[the algorithm catalog](docs/architecture.md#algorithm-catalog).
 
 **Yearly progression uses the full profile contribution total**, obtained with
 GraphQL’s `contributionCalendar.totalContributions`. Commits, issues, pull
