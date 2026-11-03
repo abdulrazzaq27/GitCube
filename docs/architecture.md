@@ -74,6 +74,29 @@ states as an additional regression check. Unmarked center-sticker spin is
 visually irrelevant, as on a standard cube; picture-cube center orientation
 is outside this project’s scope.
 
+## Algorithm catalog
+
+`src/algorithms.js` is the animation list. Each entry declares a case name, a
+cube size, a complexity tier and a notation string, and every entry is proven
+to be an involution at import time. Complexity is the rolling 30-day commit
+count: 1–29 selects tier 1, 30–99 selects tier 2, and 100 or more selects
+tier 3. Zero commits selects no algorithm at all, so the cube only turns
+gently.
+
+| Size | Tier 1 | Tier 2 | Tier 3 |
+| --- | --- | --- | --- |
+| 2×2 | Ortega PBL, diagonal / diagonal (3) | Ortega PBL, adjacent / adjacent (7) | T-perm, adjacent corners (14) |
+| 3×3 | Checkerboard (6) | T-perm (14) | Y-perm (17) |
+
+`selectAlgorithm` converts the stage's cube size and the computed tier into
+`ALGORITHMS.find(...)`, so when two entries share a size and a tier the first
+one in catalog order is used and the later one is available but not selected.
+Na-perm (21 moves, three corner/edge pairs) is registered at 3×3 tier 3
+alongside Y-perm, which puts it behind Y-perm: it is imported, verified and
+covered by the test suites, while Y-perm continues to animate the advanced
+3×3 cube. Promoting Na-perm means moving its entry ahead of Y-perm, or giving
+it a tier Y-perm does not occupy; no other stage of the pipeline changes.
+
 ## Frame schedule and loop
 
 Each loop consists of an initial solved pause, all moves of A, a pause at the

@@ -2,6 +2,7 @@ import { verifyInvolution } from './cube-state.js';
 
 const T = "R U R' U' R' F R2 U' R' U' R U R' F'";
 const Y = "F R U' R' U' R U R' F' R U R' U' R' F R F'";
+const NA = "R U R' U R U R' F' R U R' U' R' F R2 U' R' U2 R U' R'";
 
 export const ALGORITHMS = Object.freeze([
   { id: 'ortega-diagonal', name: 'Ortega PBL · diagonal / diagonal', size: 2, tier: 1,
@@ -16,6 +17,8 @@ export const ALGORITHMS = Object.freeze([
     notation: T },
   { id: 'y-perm', name: 'Y-perm', size: 3, tier: 3,
     notation: Y },
+  { id: 'na-perm', name: 'Na-perm', size: 3, tier: 3,
+    notation: NA },
 ].map(algorithm => Object.freeze({ ...algorithm, verification: verifyInvolution(algorithm.notation, algorithm.size) })));
 
 export function selectAlgorithm(size, commits30d, tiers = [30, 100]) {
