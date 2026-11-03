@@ -1,0 +1,8 @@
+node_modules/
+.npm-cache/
+output/
+test-output/
+*.tmp
+.env
+.env.*
+!.env.example

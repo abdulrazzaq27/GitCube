@@ -1,0 +1,73 @@
+name: GitCube Contribution Animation
+description: Generate a six-stage Rubik or mirror cube from yearly GitHub contributions and recent commits.
+branding:
+  icon: box
+  color: orange
+inputs:
+  username:
+    description: GitHub account to represent
+    default: ${{ github.repository_owner }}
+  token:
+    description: Token for contribution data; suitable access is needed for private commits in the 30-day complexity count
+    default: ${{ github.token }}
+  output:
+    description: GIF destination relative to the caller workspace
+    default: assets/git-cube.gif
+  upgrade-at:
+    description: Legacy option scaling all stages around this 3x3 starting threshold
+    default: ''
+  stage-thresholds:
+    description: Six yearly contribution minimums starting at 0; empty uses src/config.js
+    default: ''
+  tiers:
+    description: Two comma-separated rolling 30-day complexity boundaries
+    default: ''
+  width:
+    description: Square image size in pixels
+    default: '400'
+  theme:
+    description: both creates light and dark variants; light or dark creates one GIF
+    default: both
+outputs:
+  gif:
+    description: Generated GIF path
+    value: ${{ inputs.output }}
+  dark-gif:
+    description: Dark GIF path when theme is both (empty for single-theme output)
+    value: ${{ steps.generate.outputs.dark-gif }}
+runs:
+  using: composite
+  steps:
+    - uses: actions/setup-node@v4
+      with:
+        node-version: '22'
+    - name: Install renderer
+      shell: bash
+      working-directory: ${{ github.action_path }}
+      run: npm ci --no-audit --no-fund
+    - name: Install headless Chromium
+      shell: bash
+      working-directory: ${{ github.action_path }}
+      run: npx playwright install --with-deps chromium
+    - name: Generate cube
+      id: generate
+      shell: bash
+      env:
+        GH_TOKEN: ${{ inputs.token }}
+        CUBE_USERNAME: ${{ inputs.username }}
+        CUBE_OUTPUT: ${{ inputs.output }}
+        CUBE_UPGRADE: ${{ inputs.upgrade-at }}
+        CUBE_STAGE_THRESHOLDS: ${{ inputs.stage-thresholds }}
+        CUBE_TIERS: ${{ inputs.tiers }}
+        CUBE_WIDTH: ${{ inputs.width }}
+        CUBE_THEME: ${{ inputs.theme }}
+        CUBE_ACTION_PATH: ${{ github.action_path }}
+      run: |
+        args=("$CUBE_ACTION_PATH/bin/git-cube.js" "$CUBE_USERNAME" --output "$CUBE_OUTPUT" --width "$CUBE_WIDTH" --theme "$CUBE_THEME")
+        if [ -n "$CUBE_UPGRADE" ]; then args+=(--upgrade-at "$CUBE_UPGRADE"); fi
+        if [ -n "$CUBE_STAGE_THRESHOLDS" ]; then args+=(--stage-thresholds "$CUBE_STAGE_THRESHOLDS"); fi
+        if [ -n "$CUBE_TIERS" ]; then args+=(--tiers "$CUBE_TIERS"); fi
+        node "${args[@]}"
+        if [ "$CUBE_THEME" = 'both' ]; then
+          echo "dark-gif=${CUBE_OUTPUT%.*}-dark.gif" >> "$GITHUB_OUTPUT"
+        fi

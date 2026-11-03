@@ -1,0 +1,34 @@
+# Copy this file to .github/workflows/cube.yml in your profile repository.
+# The account is selected automatically from the repository owner.
+name: Update my Git Cube
+on:
+  schedule:
+    - cron: '17 3 * * 1'
+  workflow_dispatch:
+permissions:
+  contents: write
+concurrency:
+  group: git-cube-weekly
+  cancel-in-progress: false
+jobs:
+  cube:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: abdulrazzaq27/GitCube@v0.1.0
+        with:
+          username: ${{ github.repository_owner }}
+          token: ${{ secrets.GIT_CUBE_TOKEN || github.token }}
+          output: assets/git-cube.gif
+          theme: both
+      - name: Commit changed cube
+        shell: bash
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add -- assets/git-cube.gif assets/git-cube-dark.gif
+          if ! git diff --cached --quiet; then
+            git commit -m 'chore: update Git Cube [skip ci]'
+            git push
+          fi

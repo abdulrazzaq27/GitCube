@@ -1,0 +1,24 @@
+{
+  "name": "git-cube",
+  "version": "0.1.0",
+  "description": "Six stages of Rubik and mirror cubes driven by yearly GitHub contributions and recent commits.",
+  "type": "module",
+  "private": true,
+  "license": "MIT",
+  "engines": { "node": ">=22" },
+  "bin": { "git-cube": "bin/git-cube.js" },
+  "scripts": {
+    "test": "node --test test/*.test.js",
+    "test:render": "node --test test/render.integration.js",
+    "verify": "node scripts/verify-algorithms.js",
+    "generate": "node bin/git-cube.js",
+    "profiles": "node scripts/profiles.js",
+    "demo": "node scripts/demo.js",
+    "demo:progression": "node scripts/progression.js"
+  },
+  "dependencies": {
+    "gifenc": "1.0.3",
+    "playwright": "1.56.1",
+    "three": "0.95.0"
+  }
+}
