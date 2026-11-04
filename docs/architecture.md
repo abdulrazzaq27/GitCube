@@ -74,6 +74,30 @@ states as an additional regression check. Unmarked center-sticker spin is
 visually irrelevant, as on a standard cube; picture-cube center orientation
 is outside this project’s scope.
 
+## Algorithm catalog
+
+`src/algorithms.js` is the animation list. Each entry declares a case name, a
+cube size, a complexity tier and a notation string, and every entry is proven
+to be an involution at import time. Complexity is the rolling 30-day commit
+count: 1–29 selects tier 1, 30–99 selects tier 2, and 100 or more selects
+tier 3. Zero commits selects no algorithm at all, so the cube only turns
+gently.
+
+| Size | Tier 1 (fewer than 30) | Tier 2 (30–99) | Tier 3 (100 and up) |
+| --- | --- | --- | --- |
+| 2×2 | Ortega PBL, diagonal / diagonal (3) | Ortega PBL, adjacent / adjacent (7) | T-perm, adjacent corners (14) |
+| 3×3 | Checkerboard (6) | T-perm (14) | Na-perm, 100–149 (21) · Y-perm, 150 and up (17) |
+
+`selectAlgorithm` maps the stage's cube size and the computed tier onto
+`ALGORITHMS.find(...)`. An entry may declare an exclusive `untilCommits30d`
+ceiling, and the predicate skips entries whose ceiling the count has reached.
+A tier can therefore carry several cases in disjoint commit ranges, with
+catalog order breaking ties inside a shared range. For 3×3 tier 3, Na-perm
+(21 moves, three corner/edge pairs) animates 100–149 recent commits and
+Y-perm animates 150 and up. The 2×2 does not split its advanced tier, so
+`pocket-t` covers every count from 100 upward. Splitting a tier changes only
+which verified case plays; the plan, renderer and loop checks are unchanged.
+
 ## Frame schedule and loop
 
 Each loop consists of an initial solved pause, all moves of A, a pause at the

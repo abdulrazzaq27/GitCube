@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { mkdir, readFile } from 'node:fs/promises';
-import { ALGORITHMS } from '../src/algorithms.js';
+import { ALGORITHMS, selectAlgorithm } from '../src/algorithms.js';
 import { applyMoves, solvedStickers } from '../src/cube-state.js';
 import { activityWindows } from '../src/activity.js';
 import { createPlan } from '../src/plan.js';
@@ -13,8 +13,16 @@ function fixture(size, tier) {
     windows: activityWindows('2026-11-03T00:00:00Z'), scope: 'yearly-profile-contributions-and-recent-commits' };
 }
 
+// A tier can hold several cases in disjoint commit ranges, so pick a count that
+// actually selects this entry and render the algorithm named in the title.
+function reachingFixture(algorithm) {
+  const commits30d = [10, 50, 120, 200, 1000].find(count => selectAlgorithm(algorithm.size, count)?.id === algorithm.id);
+  assert.ok(commits30d !== undefined, `no 30-day commit count selects ${algorithm.id}`);
+  return { ...fixture(algorithm.size, algorithm.tier), commits30d };
+}
+
 for (const a of ALGORITHMS) test(`original WebGL engine follows oracle at EVERY turn: ${a.size}×${a.size} ${a.id}`, async () => {
-  const plan = createPlan(fixture(a.size, a.tier), { width: 160 });
+  const plan = createPlan(reachingFixture(a), { width: 160 });
   const { browser, page } = await openRenderer(plan);
   try {
     let expected = solvedStickers(a.size);

@@ -53,6 +53,13 @@ test('size and complexity vary independently at exact thresholds', () => {
   }
 });
 
+test('the advanced 3×3 tier splits at 150 commits between Na-perm and Y-perm', () => {
+  for (const [count, id] of [[100, 'na-perm'], [149, 'na-perm'], [150, 'y-perm'], [2000, 'y-perm']])
+    assert.equal(createPlan(snapshot(count, Math.max(500, count))).algorithm.id, id);
+  // The 2×2 advanced tier is not split, so its case is unaffected.
+  for (const count of [100, 150, 400]) assert.equal(createPlan(snapshot(count, 499)).algorithm.id, 'pocket-t');
+});
+
 test('plans reproduce and GIF frame timing is exact', () => {
   const s = snapshot(120, 600);
   assert.deepEqual(createPlan(s), createPlan(s));
