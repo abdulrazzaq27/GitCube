@@ -58,6 +58,8 @@ whole-cube rotation. [View the full progression gallery](docs/progression.md).
    repository as **`.github/workflows/cube.yml`**. It uses
    `abdulrazzaq27/GitCube@v0.1.0` and selects your username automatically. No fork,
    local installation, or token pasted into a file is required.
+   If you copied an older workflow, set `runs-on: ubuntu-24.04` so the Action
+   can install Chromium with its pinned Playwright version.
 3. Add this theme-aware image to your profile `README.md`:
 
    ```html
