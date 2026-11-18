@@ -2,14 +2,14 @@
 
 Cube stages use all profile contributions in the rolling last 365 days, including private activity totals visible on GitHub. Algorithm complexity uses commit contributions visible to the authenticated token in the rolling last 30 days.
 
-Shared endpoint (UTC): 2026-11-03T19:49:37.823Z.
-30-day start: 2026-10-04T19:49:37.823Z. 365-day start: 2025-11-03T19:49:37.823Z.
+Shared endpoint (UTC): 2026-11-18T17:39:51.047Z.
+30-day start: 2026-10-19T17:39:51.047Z. 365-day start: 2025-11-18T17:39:51.047Z.
 These explicit rolling windows may differ from the default profile graph's date range.
 
 | Account | Commits / 30 days | Contributions / 365 days | Stage | Algorithm |
 | --- | ---: | ---: | --- | --- |
-| [abdulrazzaq27](https://github.com/abdulrazzaq27) | 32 | 209 | 2 · 2×2 Silver Mirror Cube | Ortega PBL · adjacent / adjacent |
-| [osman-bin-nasir](https://github.com/osman-bin-nasir) | 50 | 817 | 4 · 3×3 Rubik’s Cube | T-perm |
+| [abdulrazzaq27](https://github.com/abdulrazzaq27) | 41 | 185 | 2 · 2×2 Silver Mirror Cube | Ortega PBL · adjacent / adjacent |
+| [osman-bin-nasir](https://github.com/osman-bin-nasir) | 55 | 823 | 4 · 3×3 Rubik’s Cube | T-perm |
 
 ## abdulrazzaq27
 
